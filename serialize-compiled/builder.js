@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: !0 }),
   (exports.getRootData = exports.reduceEmptyArray = exports.FORMAT_VERSION = void 0);
-const e = require("./types"),
+const types = require("./types"),
   t = require("./create-class-mask"),
   s = cc._deserializeCompiled._serializeBuiltinValueTypes,
   {
@@ -56,8 +56,8 @@ function d(e) {
   (exports.reduceEmptyArray = d);
 class h {
   constructor(t) {
-    (this.sharedUuids = new e.TraceableDict()),
-      (this.sharedStrings = new e.TraceableDict()),
+    (this.sharedUuids = new types.TraceableDict()),
+      (this.sharedStrings = new types.TraceableDict()),
       (this.dependAssets = new Array()),
       (this.objects = new Map()),
       (this.normalNodes = new Array()),
@@ -71,11 +71,11 @@ class h {
       (this.refsBuilder = new o.Impl(this));
   }
   setProperty_Array(t, s, r, i) {
-    let n = new e.ArrayNode(i.arrayLength);
+    let n = new types.ArrayNode(i.arrayLength);
     this.advancedNodes.push(n), this.setDynamicProperty(t, s, r, n);
   }
   setProperty_Dict(t, s, r, i) {
-    let n = new e.DictNode();
+    let n = new types.DictNode();
     this.advancedNodes.push(n), this.setDynamicProperty(t, s, r, n);
   }
   setProperty_Class(e, t, s, r) {
@@ -89,7 +89,7 @@ class h {
   }
   setProperty_CustomizedClass(t, s, r, i) {
     let n = cc.js._getClassId(r.constructor, !1),
-      a = new e.CustomClassNode(n, i.content);
+      a = new types.CustomClassNode(n, i.content);
     this.advancedNodes.push(a),
       this.classNodes.push(a),
       this.setDynamicProperty(t, s, r, a);
@@ -129,10 +129,10 @@ class h {
   setProperty_AssetUuid(t, s, r, i) {
     let n = this.getExistsNode(t);
     this.dependAssets.push(n, s, r),
-      n instanceof e.CustomClassNode && (n.shouldBeIndexed = !0);
+      n instanceof types.CustomClassNode && (n.shouldBeIndexed = !0);
   }
   doSetClassProperty(t, s, r, i) {
-    let n = new e.ClassNode(i);
+    let n = new types.ClassNode(i);
     return (
       this.normalNodes.push(n),
       this.classNodes.push(n),
@@ -160,13 +160,13 @@ class h {
   }
   collectInstances() {
     (this.normalNodes = this.normalNodes.filter((e) => e.refCount > 1)),
-      this.normalNodes.sort(e.BaseNode.compareByRefCount),
+      this.normalNodes.sort(types.BaseNode.compareByRefCount),
       (this.advancedNodes = this.advancedNodes.filter(
         (e) => e.shouldBeIndexed || e.refCount > 1
       )),
-      this.advancedNodes.sort(e.BaseNode.compareByRefCount);
+      this.advancedNodes.sort(types.BaseNode.compareByRefCount);
     let t = this.rootNode;
-    if (t instanceof e.ClassNode) {
+    if (t instanceof types.ClassNode) {
       let e = this.normalNodes.indexOf(t);
       -1 !== e && this.normalNodes.splice(e, 1), this.normalNodes.unshift(t);
     } else {
@@ -194,7 +194,7 @@ class h {
     for (let t = 0; t < this.advancedNodes.length; ++t) {
       let i = this.advancedNodes[t],
         a = i.dumpRecursively(this.refsBuilder);
-      i instanceof e.CustomClassNode ? (s[r + t] = a[n]) : (s[r + t] = a);
+      i instanceof types.CustomClassNode ? (s[r + t] = a[n]) : (s[r + t] = a);
     }
     if (
       0 !== this.rootNode.instanceIndex ||
@@ -208,7 +208,7 @@ class h {
   }
   dumpInstanceTypes() {
     let t = this.advancedNodes.map((t) =>
-      t instanceof e.CustomClassNode ? t.dumped[i] : ~t.selfType
+      t instanceof types.CustomClassNode ? t.dumped[i] : ~t.selfType
     );
     this.data[6] = d(t);
   }

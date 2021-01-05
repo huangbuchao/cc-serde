@@ -1,1 +1,1 @@
-import './deserialize';
+require("./deserialize");
