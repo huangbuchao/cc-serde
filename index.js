@@ -1,1 +1,1 @@
-require("./cocos/cocos2d-js");
+import "./cocos/cocos2d-js";
